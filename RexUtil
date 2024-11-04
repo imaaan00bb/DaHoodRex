@@ -1,0 +1,84 @@
+--rex DaHood
+local DrRayLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
+local window = DrRayLibrary:Load("Rex Utilities", "Default")
+
+local tab = DrRayLibrary.newTab("AimLock", "ImageIdHere")
+tab.newButton("Aimlock", "dahood aimlock lolol", function()
+    local player = game.Players.LocalPlayer
+    local mouse = player:GetMouse()
+    local aiming = false
+
+    local function getNearestTarget()
+        local nearestPlayer, minDistance = nil, math.huge
+        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+            if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local hrp = otherPlayer.Character.HumanoidRootPart
+                local predictedPosition = hrp.Position + hrp.Velocity.Unit * 1.75
+                local screenPoint = workspace.CurrentCamera:WorldToScreenPoint(predictedPosition)
+                local distance = (Vector2.new(screenPoint.X, screenPoint.Y) - Vector2.new(mouse.X, mouse.Y)).Magnitude
+
+                if distance < minDistance and screenPoint.Z > 0 then
+                    minDistance = distance
+                    nearestPlayer = otherPlayer
+                end
+            end
+        end
+        return nearestPlayer
+    end
+
+    local function aimAtTarget(target)
+        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = target.Character.HumanoidRootPart
+            local predictedPosition = hrp.Position + hrp.Velocity.Unit * 1.75
+            workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.Position, predictedPosition)
+        end
+    end
+
+    local function lockOn()
+        while aiming do
+            local target = getNearestTarget()
+            if target then
+                aimAtTarget(target)
+            end
+            wait(0.01)
+        end
+    end
+
+    mouse.Button2Down:Connect(function()
+        aiming = true
+        lockOn()
+    end)
+
+    mouse.Button2Up:Connect(function()
+        aiming = false
+    end)
+end)
+
+local vis = DrRayLibrary.newTab("Visuals", "ImageIdHere")
+tab.newButton("Chams", "js esp but best mode", function()
+    while task.wait(2) do
+        local player = game.Players.LocalPlayer
+
+        local function chamslel()
+            for _, targetPlayer in pairs(game.Players:GetPlayers()) do
+                if targetPlayer ~= player then
+                    local targetCharacter = targetPlayer.Character
+                    if targetCharacter then
+                        if not targetCharacter:FindFirstChild("fgfgfg") then
+                            local highlight = Instance.new("fgfgfg")
+                            highlight.Parent = targetCharacter
+                            highlight.Adornee = targetCharacter
+                            highlight.FillTransparency = 0.5
+                            highlight.OutlineTransparency = 0
+                            highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                            highlight.FillColor = Color3.fromRGB(255, 255, 0)
+                            highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+                        end
+                    end
+                end
+            end
+        end
+
+        chamslel()
+    end
+end)
